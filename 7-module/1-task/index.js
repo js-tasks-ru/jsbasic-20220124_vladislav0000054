@@ -2,6 +2,7 @@ import createElement from '../../assets/lib/create-element.js';
 
 export default class RibbonMenu {
   elem = null;
+  value = '';
 
   constructor(categories) {
     this.categories = categories;
@@ -35,6 +36,10 @@ export default class RibbonMenu {
       nav.append(a);
     }
 
+    let firstCategory = nav.querySelector('[data-id]');
+    firstCategory.classList.add('ribbon__item_active');
+    this.value = firstCategory.dataset.id;
+
     return container;
   }
 
@@ -60,10 +65,16 @@ export default class RibbonMenu {
     });
 
     ribbonInner.addEventListener("click", (event) => {
-      if(!event.target.closest('a.ribbon__item')){
+      const currentItem = event.target.closest('a.ribbon__item');
+      if(!currentItem){
         return;
       }
       
+      event.preventDefault();
+      this.value = event.target.dataset.id;
+      this.elem.querySelector('.ribbon__item_active').classList.remove('ribbon__item_active');
+      currentItem.classList.add('ribbon__item_active');
+
       ribbonInner.dispatchEvent(new CustomEvent("ribbon-select", {
         detail: event.target.dataset.id,
         bubbles: true
