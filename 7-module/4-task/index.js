@@ -5,6 +5,7 @@ export default class StepSlider {
   sliderValueSpan = null;
   steps = [];
   progressValues = [];
+  value = 0;
 
   get elem(){
     return this.elem;
@@ -23,7 +24,8 @@ export default class StepSlider {
     this.progressValues = [...Array(steps).keys()].map(x => Math.round(x / (steps - 1) * 100));
     this.steps = [...Array(steps).keys()].map(x => createElement(`<span></span>`));
     this.steps[value].classList.add('slider__step-active');
-    
+    this.value = value;
+
     const container = createElement(`
       <div class="slider">
         <div class="slider__thumb" style="left: ${this.progressValues[value]}%;">
@@ -129,6 +131,7 @@ export default class StepSlider {
     this.elem.querySelector('span.slider__step-active').classList.remove('slider__step-active');
     this.steps[stepIndex].classList.add('slider__step-active');
     this.sliderValueSpan.textContent = stepIndex;
+    this.value = stepIndex;
   }
 
   getStepIndex(clientX){
